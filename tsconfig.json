@@ -6,7 +6,10 @@
     "outDir": "./dist",
     "strict": true,
     "skipLibCheck": true,
-    "target": "es2016"
+    "target": "es2016",
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "emitDecoratorMetadata": true
   },
   "include": ["./src/**/*"]
 }
