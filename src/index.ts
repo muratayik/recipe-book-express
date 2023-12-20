@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
+
 dotenv.config();
 
 import { AppDataSource } from "./config/data-source";
@@ -8,6 +10,7 @@ import CategoryController from "./category/category.controller";
 import MealController from "./meal/meal.controller";
 
 const app = express();
+app.use(cors());
 
 app.use("/category", CategoryController);
 app.use("/meal", MealController);
