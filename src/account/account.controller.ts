@@ -12,7 +12,7 @@ router.post(
       const newAccount = await AccountService.register(registerDTO);
       res.status(201).send(newAccount);
     } catch (error: any) {
-      res.status(500).send(error.message);
+      next(error);
     }
   }
 );
@@ -24,7 +24,7 @@ router.post(
       const account = await AccountService.login(req.body);
       res.send(account);
     } catch (error: any) {
-      res.status(500).send(error.message);
+      next(error);
     }
   }
 );
@@ -36,7 +36,7 @@ router.post(
       const verifyResult = await AccountService.verifyToken(req.body);
       res.send(verifyResult);
     } catch (error: any) {
-      res.status(500).send(error.message);
+      next(error);
     }
   }
 );

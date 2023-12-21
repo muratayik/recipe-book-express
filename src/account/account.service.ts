@@ -1,24 +1,25 @@
 import * as AccountRepository from "./account.repository";
 import * as JwtUtils from "../utils/jwt.utils";
 import * as BcryptUtils from "../utils/bcrypt.utils";
+import * as RoleUtils from "../utils/role.utils";
 import { LoginDTO } from "./dto/login.dto";
 import { RegisterDTO } from "./dto/register.dto";
 import { VerifyDTO } from "./dto/verify.dto";
 import { Account } from "./account.entity";
 import { AuthResponse } from "./dto/auth-response.dto";
+import { BadRequestError } from "../config/custom.error";
 
 export const register = async (registerDTO: RegisterDTO) => {
   const { email, password, username } = registerDTO;
 
   const accountWithSameEmail = await AccountRepository.getAccount(email);
   if (accountWithSameEmail) {
-    throw new Error("An account with this email already exists!!!");
+    throw new BadRequestError("An account with this email already exists!!!");
   }
 
   const hashedPassword = BcryptUtils.hashPassword(password);
 
-  // TODO : find roles from env file
-  const role = "user";
+  const role = RoleUtils.findUserRole(email);
 
   const newAccount = await AccountRepository.createAccount(
     email,
@@ -35,7 +36,7 @@ export const login = async (loginDTO: LoginDTO) => {
 
   const account = await AccountRepository.getAccount(email);
   if (!account) {
-    throw new Error(`Account with email ${email} not found!`);
+    throw new BadRequestError(`Account with email ${email} not found!`);
   }
 
   const passwordsMatch = BcryptUtils.comparePasswords(
@@ -43,7 +44,7 @@ export const login = async (loginDTO: LoginDTO) => {
     account.password
   );
   if (!passwordsMatch) {
-    throw new Error("Invalid Credentials!!!");
+    throw new BadRequestError("Invalid Credentials!!!");
   }
 
   return generateAuthReponse(account);
@@ -56,7 +57,7 @@ export const verifyToken = async (verifyDTO: VerifyDTO) => {
   const account = await AccountRepository.getAccount(email);
 
   if (!account) {
-    throw new Error(`Account with email ${email} not found!`);
+    throw new BadRequestError(`Account with email ${email} not found!`);
   }
 
   return generateAuthReponse(account, token);

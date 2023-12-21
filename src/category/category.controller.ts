@@ -9,7 +9,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     const categories = await CategoryService.getCategories();
     res.send(categories);
   } catch (error: any) {
-    res.status(500).send(error.message);
+    next(error);
   }
 });
 

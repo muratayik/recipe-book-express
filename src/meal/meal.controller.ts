@@ -15,7 +15,7 @@ router.get(
 
       res.send(mealsOfCategory);
     } catch (error: any) {
-      res.status(500).send(error.message);
+      next(error);
     }
   }
 );
@@ -30,7 +30,7 @@ router.get(
       );
       res.send(mealDetail);
     } catch (error: any) {
-      res.status(500).send(error.message);
+      next(error);
     }
   }
 );
