@@ -8,10 +8,13 @@ import { AppDataSource } from "./config/data-source";
 
 import CategoryController from "./category/category.controller";
 import MealController from "./meal/meal.controller";
+import AccountController from "./account/account.controller";
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
+app.use("/account", AccountController);
 app.use("/category", CategoryController);
 app.use("/meal", MealController);
 

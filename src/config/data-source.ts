@@ -3,6 +3,7 @@ import { Category } from "../category/category.entity";
 import { Meal } from "../meal/meal.entity";
 import { Ingredient } from "../ingredient/ingredient.entity";
 import { Instruction } from "../instruction/instruction.entity";
+import { Account } from "../account/account.entity";
 
 const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE } = process.env;
 
@@ -13,5 +14,5 @@ export const AppDataSource = new DataSource({
   username: DB_USERNAME,
   password: DB_PASSWORD,
   database: DB_DATABASE,
-  entities: [Category, Meal, Ingredient, Instruction],
+  entities: [Account, Category, Ingredient, Instruction, Meal],
 });
