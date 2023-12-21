@@ -1,8 +1,11 @@
 import * as AccountRepository from "./account.repository";
+import * as JwtUtils from "../utils/jwt.utils";
+import * as BcryptUtils from "../utils/bcrypt.utils";
 import { LoginDTO } from "./dto/login.dto";
 import { RegisterDTO } from "./dto/register.dto";
-
-import bcrypt from "bcrypt";
+import { VerifyDTO } from "./dto/verify.dto";
+import { Account } from "./account.entity";
+import { AuthResponse } from "./dto/auth-response.dto";
 
 export const register = async (registerDTO: RegisterDTO) => {
   const { email, password, username } = registerDTO;
@@ -12,7 +15,7 @@ export const register = async (registerDTO: RegisterDTO) => {
     throw new Error("An account with this email already exists!!!");
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = BcryptUtils.hashPassword(password);
 
   // TODO : find roles from env file
   const role = "user";
@@ -24,7 +27,7 @@ export const register = async (registerDTO: RegisterDTO) => {
     role
   );
 
-  return newAccount;
+  return generateAuthReponse(newAccount);
 };
 
 export const login = async (loginDTO: LoginDTO) => {
@@ -32,13 +35,45 @@ export const login = async (loginDTO: LoginDTO) => {
 
   const account = await AccountRepository.getAccount(email);
   if (!account) {
-    throw new Error("An account with this email not found!!!");
+    throw new Error(`Account with email ${email} not found!`);
   }
 
-  const passwordsMatch = await bcrypt.compare(password, account.password);
+  const passwordsMatch = BcryptUtils.comparePasswords(
+    password,
+    account.password
+  );
   if (!passwordsMatch) {
     throw new Error("Invalid Credentials!!!");
   }
 
-  return account;
+  return generateAuthReponse(account);
+};
+
+export const verifyToken = async (verifyDTO: VerifyDTO) => {
+  const { token } = verifyDTO;
+  const email = JwtUtils.verifyTokenAndReturnEmail(token);
+
+  const account = await AccountRepository.getAccount(email);
+
+  if (!account) {
+    throw new Error(`Account with email ${email} not found!`);
+  }
+
+  return generateAuthReponse(account, token);
+};
+
+const generateAuthReponse = (
+  account: Account,
+  generatedToken = ""
+): AuthResponse => {
+  const { email, username, role } = account;
+
+  const token = !!generatedToken ? generatedToken : JwtUtils.sign(email);
+
+  return {
+    email,
+    role,
+    username,
+    token,
+  };
 };

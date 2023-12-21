@@ -29,4 +29,16 @@ router.post(
   }
 );
 
+router.post(
+  "/verify",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const verifyResult = await AccountService.verifyToken(req.body);
+      res.send(verifyResult);
+    } catch (error: any) {
+      res.status(500).send(error.message);
+    }
+  }
+);
+
 export default router;
