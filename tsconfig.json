@@ -11,5 +11,6 @@
     "strictPropertyInitialization": false,
     "emitDecoratorMetadata": true
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*"],
+  "files": ["types.d.ts"]
 }

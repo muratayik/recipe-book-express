@@ -1,4 +1,4 @@
-import { BadRequestError } from "../config/custom.error";
+import { NotFoundError } from "../error/custom.error";
 import * as CategoryRepository from "./category.repository";
 
 export const getCategories = async () =>
@@ -7,7 +7,7 @@ export const getCategories = async () =>
 export const getCategory = async (id: number) => {
   const category = await CategoryRepository.getCategory(id);
   if (!category) {
-    throw new BadRequestError(`Category with id ${id} not found!`);
+    throw new NotFoundError(`Category with id ${id} not found!`);
   }
   return category;
 };
@@ -17,7 +17,7 @@ export const getCategoryFromPublicId = async (categoryPublicId: string) => {
     categoryPublicId
   );
   if (!category) {
-    throw new BadRequestError(
+    throw new NotFoundError(
       `Category with public id ${categoryPublicId} not found!`
     );
   }

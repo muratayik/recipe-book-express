@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { BadRequestError } from "../config/custom.error";
+import { UnauthorizedError } from "../error/custom.error";
 
 class ExtendedPayload implements JwtPayload {
   email: string;
@@ -21,6 +21,6 @@ export const verifyTokenAndReturnEmail = (token: string) => {
     const decoded = jwt.verify(token, secret) as ExtendedPayload;
     return decoded.email;
   } catch {
-    throw new BadRequestError("Invalid Token!");
+    throw new UnauthorizedError("Invalid Token!");
   }
 };

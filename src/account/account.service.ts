@@ -7,7 +7,11 @@ import { RegisterDTO } from "./dto/register.dto";
 import { VerifyDTO } from "./dto/verify.dto";
 import { Account } from "./account.entity";
 import { AuthResponse } from "./dto/auth-response.dto";
-import { BadRequestError } from "../config/custom.error";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../error/custom.error";
 
 export const register = async (registerDTO: RegisterDTO) => {
   const { email, password, username } = registerDTO;
@@ -36,7 +40,7 @@ export const login = async (loginDTO: LoginDTO) => {
 
   const account = await AccountRepository.getAccount(email);
   if (!account) {
-    throw new BadRequestError(`Account with email ${email} not found!`);
+    throw new UnauthorizedError("Invalid Credentials!!!");
   }
 
   const passwordsMatch = BcryptUtils.comparePasswords(
@@ -44,7 +48,7 @@ export const login = async (loginDTO: LoginDTO) => {
     account.password
   );
   if (!passwordsMatch) {
-    throw new BadRequestError("Invalid Credentials!!!");
+    throw new UnauthorizedError("Invalid Credentials!!!");
   }
 
   return generateAuthReponse(account);
@@ -57,7 +61,7 @@ export const verifyToken = async (verifyDTO: VerifyDTO) => {
   const account = await AccountRepository.getAccount(email);
 
   if (!account) {
-    throw new BadRequestError(`Account with email ${email} not found!`);
+    throw new NotFoundError(`Account with email ${email} not found!`);
   }
 
   return generateAuthReponse(account, token);
