@@ -1,3 +1,4 @@
+import { In } from "typeorm";
 import { AppDataSource } from "../config/data-source";
 import { Meal } from "./meal.entity";
 
@@ -8,3 +9,6 @@ export const getByCategoryId = (categoryId: number) =>
 
 export const getMealByPublicId = (publicId: string) =>
   createRepository().findOneBy({ publicId });
+
+export const getMultipleMealsByPublicId = (mealPublicIdList: string[]) =>
+  createRepository().find({ where: { publicId: In([...mealPublicIdList]) } });

@@ -38,3 +38,13 @@ export const getMealDetailByPublicId = async (
     ingredients: ingredientList,
   };
 };
+
+export const getMultipleMealsByPublicId = async (
+  mealPublicIdList: string[]
+) => {
+  const mealList = await MealRepository.getMultipleMealsByPublicId(
+    mealPublicIdList
+  );
+
+  return mealList;
+};
