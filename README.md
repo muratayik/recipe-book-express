@@ -31,6 +31,12 @@ This application provides API services for recipe-book application.
 5. Run project via `npm run dev`
    <br/>
 
+6. Now endpoints can be tested. Postman request export ('recipe-book.postman_collection.json') can be imported and used.
+   - All meal and category endpoints can be used directly.
+   - In order to use 'favorite' endpoints, a token is necessary. After successful register or login, token is saved (by postman tests) to postman environmental variables. No extra task is required for token. Only a successful login or register is enough.
+   - Favorite requests use the token that was taken from login or register to authenticate request.
+     <br/>
+
 ## Technologies
 
 - Typescript
