@@ -28,7 +28,7 @@ This application provides API services for recipe-book application.
 4. Run `npm install` to get dependencies.
    <br/>
 
-5. Run project via `npm run start`
+5. Run project via `npm run dev`
    <br/>
 
 ## Technologies
