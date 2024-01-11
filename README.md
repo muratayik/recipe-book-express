@@ -1,6 +1,7 @@
 # Recipe Book Backend :minidisc:
 
 This application provides API services for recipe-book application.
+To see the live demo you can visit s3 hosting url [here.](http://recipe-book-angular.s3-website.eu-central-1.amazonaws.com/)
 
 ## How to run in local
 
